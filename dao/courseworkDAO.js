@@ -1,27 +1,11 @@
-import mongodb from "mongodb";
-const ObjectId = mongodb.ObjectId;
-
-let coursework;
+import model from "../api/courseModel.js";
 
 export default class CourseworkDAO {
-  static async injectDB(conn) {
-    if (coursework) {
-      return;
-    }
-    try {
-      coursework = await conn.db(process.env.MY_DB_NS).collection("coursework");
-    } catch (e) {
-      console.error(
-        `Unable to establish a collection handle in courseworkDAO: ${e}`
-      );
-    }
-  }
-
   static async refreshCoursework() {
     let cursor;
     try {
       // Get all data from db
-      cursor = await coursework.find().toArray();
+      cursor = await model.findOne();
       // return cursor;
     } catch (e) {
       console.error(
@@ -29,9 +13,7 @@ export default class CourseworkDAO {
       );
       return { refresh_time: "error", courses: [] };
     }
-    let result = await CourseworkDAO.getRefreshedCoursework(
-      cursor[0].refresh_time
-    );
+    let result = await CourseworkDAO.getRefreshedCoursework(cursor);
     return {
       refresh_time: new Date(result.refresh_time).toUTCString(),
       courses: result.courses,
@@ -39,7 +21,7 @@ export default class CourseworkDAO {
   }
 
   // Fetches, updates and returns new course data. If API call limit has been reached, return null;
-  static async getRefreshedCoursework(lastRefreshTime) {
+  static async getRefreshedCoursework(cursor) {
     let courses = [
       "CS50x",
       "CS61A",
@@ -56,15 +38,14 @@ export default class CourseworkDAO {
     if (courseData["courses"] === null) {
       return null;
     }
-    coursework.updateOne(
-      { refresh_time: lastRefreshTime },
-      {
-        $set: {
-          refresh_time: courseData.refresh_time,
-          courses: courseData.courses,
-        },
-      }
-    );
+    await cursor.updateOne({}, {
+      refresh_time: courseData.refresh_time,
+      courses: courseData.courses
+    });
+    await cursor.save((err) => {
+      if (err) console.log(err);
+    });
+
     return courseData;
   }
 
@@ -134,8 +115,7 @@ export default class CourseworkDAO {
     let cursor;
     try {
       // Get all data from db
-      cursor = await coursework.find().toArray();
-      // return cursor;
+      cursor = await model.findOne();
     } catch (e) {
       console.error(
         `Unable to find coursework data from db or convert results to an array, ${e}`
@@ -144,32 +124,27 @@ export default class CourseworkDAO {
     }
     try {
       // Find time, refresh courses if 20+ minutes has passed since last refresh, and then return the refreshed courses.
-      let data = cursor.map(CourseworkDAO.checkForRefresh);
-      let newCursor = await Promise.all(data);
-      if (newCursor && newCursor[0]) {
-        cursor = newCursor;
+      let data = await CourseworkDAO.checkForRefresh(cursor);
+      if (data) {
+        cursor = data;
       }
     } catch (e) {
       console.error(`Unable to check whether a refresh is necessary, ${e}`);
     }
     return {
-      refresh_time: new Date(cursor[0].refresh_time).toUTCString(),
-      courses: cursor[0].courses,
+      refresh_time: new Date(cursor.refresh_time).toUTCString(),
+      courses: cursor.courses,
     };
   }
 
-  static async checkForRefresh(course) {
+  static async checkForRefresh(cursor) {
     let MINIMUM_TIME_BEFORE_REFRESH = 1200000; // 20 minutes in milliseconds
-    if (course.refresh_time) {
-      if (course.refresh_time < Date.now() - MINIMUM_TIME_BEFORE_REFRESH) {
-        try {
-          let response = await CourseworkDAO.getRefreshedCoursework(
-            course.refresh_time
-          );
-          return response;
-        } catch (e) {
-          console.error(`Unable to refresh coursework, ${e}`);
-        }
+    if (cursor.refresh_time < Date.now() - MINIMUM_TIME_BEFORE_REFRESH) {
+      try {
+        let response = await CourseworkDAO.getRefreshedCoursework(cursor);
+        return response;
+      } catch (e) {
+        console.error(`Unable to refresh coursework, ${e}`);
       }
     }
   }

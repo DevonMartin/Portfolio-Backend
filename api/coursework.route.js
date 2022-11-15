@@ -1,9 +1,11 @@
 import express from "express";
-import CourseworkCtrl from "./coursework.controller.js";
+import {apiGetCoursework, apiRefreshCoursework} from "../api/coursework.controller.js";
 
 const router = express.Router();
 
-router.route("/").get(CourseworkCtrl.apiGetCoursework);
-router.route("/refresh").get(CourseworkCtrl.apiRefreshCoursework);
+
+
+router.get("/", apiGetCoursework);
+router.get("/refresh", apiRefreshCoursework);
 
 export default router;

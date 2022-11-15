@@ -28,7 +28,7 @@ export default class EmailController {
       port: 465,
       auth: {
         user: "devonmartinbot@gmail.com",
-        pass: process.env.EMAIL_PASSWORD,
+        pass: "ekfbxqbsxgbyngtl",
       },
     });
     let mailOptions = {

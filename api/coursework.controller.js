@@ -1,13 +1,9 @@
 import CourseworkDAO from "../dao/courseworkDAO.js";
 
-export default class CourseworkController {
-  static async apiGetCoursework(req, res) {
-    const coursesData = await CourseworkDAO.getCoursework();
-    res.json(coursesData);
-  }
+export const apiGetCoursework = async (req, res) => {
+  res.send(await CourseworkDAO.getCoursework());
+};
 
-  static async apiRefreshCoursework(req, res) {
-    const coursesData = await CourseworkDAO.refreshCoursework();
-    res.json(coursesData);
-  }
-}
+export const apiRefreshCoursework = async (req, res) => {
+  res.send(await CourseworkDAO.refreshCoursework());
+};
