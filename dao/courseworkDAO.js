@@ -124,7 +124,7 @@ export default class CourseworkDAO {
     }
     try {
       // Find time, refresh courses if 20+ minutes has passed since last refresh, and then return the refreshed courses.
-      let data = await CourseworkDAO.checkForRefresh(cursor);
+      let data = await CourseworkDAO.checkForRefresh(await cursor);
       if (data) {
         cursor = data;
       }
@@ -139,6 +139,7 @@ export default class CourseworkDAO {
 
   static async checkForRefresh(cursor) {
     let MINIMUM_TIME_BEFORE_REFRESH = 1200000; // 20 minutes in milliseconds
+    console.log(cursor)
     if (cursor.refresh_time < Date.now() - MINIMUM_TIME_BEFORE_REFRESH) {
       try {
         let response = await CourseworkDAO.getRefreshedCoursework(cursor);
