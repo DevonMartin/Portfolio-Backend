@@ -9,9 +9,6 @@
     "client": "npm run start --prefix ../client",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
-  "engines": {
-    "node": "16"
-  },
   "author": "Devon Martin",
   "license": "ISC",
   "dependencies": {
@@ -19,8 +16,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jquery": "^3.6.1",
-    "mongodb": "^4.11.0",
     "mongoose": "^6.7.2",
+    "node-fetch": "^3.3.0",
     "nodemailer": "^6.8.0"
   },
   "devDependencies": {
