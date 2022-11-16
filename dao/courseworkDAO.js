@@ -39,10 +39,9 @@ export default class CourseworkDAO {
     if (courseData["courses"] === null) {
       return null;
     }
-    await cursor.updateOne({}, {
-      refresh_time: courseData.refresh_time,
-      courses: courseData.courses
-    });
+    cursor.refresh_time = courseData.refresh_time;
+    cursor.courses = courseData.courses;
+    await cursor.markModified(['refresh_time', 'courses']);
     await cursor.save((err) => {
       if (err) console.log(err);
     });

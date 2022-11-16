@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 import nodemailer from "nodemailer";
 
 async function validateHuman(token) {

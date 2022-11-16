@@ -5,6 +5,6 @@ const schema = mongoose.Schema({
   courses: [],
 });
 
-let coursework = mongoose.model("coursework", schema);
+let coursework = mongoose.model("course", schema);
 
 export default coursework;
