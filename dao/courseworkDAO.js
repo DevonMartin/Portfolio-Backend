@@ -139,7 +139,6 @@ export default class CourseworkDAO {
 
   static async checkForRefresh(cursor) {
     let MINIMUM_TIME_BEFORE_REFRESH = 1200000; // 20 minutes in milliseconds
-    console.log(cursor)
     if (cursor.refresh_time < Date.now() - MINIMUM_TIME_BEFORE_REFRESH) {
       try {
         let response = await CourseworkDAO.getRefreshedCoursework(cursor);

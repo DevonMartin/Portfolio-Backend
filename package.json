@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "server": "nodemon server",
-    "client": "npm run start --prefix ../client",
-    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "client": "npm run start --prefix ../devonmartin-frontend",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "node index.js"
   },
   "author": "Devon Martin",
   "license": "ISC",
@@ -22,5 +23,14 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DevonMartin/devonmartin-backend.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/DevonMartin/devonmartin-backend/issues"
+  },
+  "homepage": "https://github.com/DevonMartin/devonmartin-backend#readme"
 }
