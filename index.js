@@ -11,5 +11,3 @@ mongoose.connect(process.env.MY_DB_URI).then(async () => {
     console.log(`Listening on port ${port}.`);
   });
 });
-
-export default mongoose;
