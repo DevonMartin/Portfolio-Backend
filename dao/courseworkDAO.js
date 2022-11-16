@@ -1,3 +1,4 @@
+import fetch from 'node-fetch';
 import model from "../api/courseModel.js";
 
 export default class CourseworkDAO {
