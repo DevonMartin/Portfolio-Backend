@@ -15,10 +15,7 @@ export default class CourseworkDAO {
       return { refresh_time: "error", courses: [] };
     }
     let result = await CourseworkDAO.getRefreshedCoursework(cursor);
-    return {
-      refresh_time: new Date(result.refresh_time).toUTCString(),
-      courses: result.courses,
-    };
+    return result;
   }
 
   // Fetches, updates and returns new course data. If API call limit has been reached, return null;
@@ -131,10 +128,7 @@ export default class CourseworkDAO {
     } catch (e) {
       console.error(`Unable to check whether a refresh is necessary, ${e}`);
     }
-    return {
-      refresh_time: new Date(cursor.refresh_time).toUTCString(),
-      courses: cursor.courses,
-    };
+    return cursor;
   }
 
   static async checkForRefresh(cursor) {
