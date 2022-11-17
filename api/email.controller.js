@@ -20,7 +20,7 @@ export default class EmailController {
     let human = await validateHuman(data.token);
 
     if (!human) {
-      res.send("Error: reCAPTCHA determined you are a bot.");
+      res.status(201).send("Error: reCAPTCHA determined you are a bot.");
       return;
     }
 
@@ -50,9 +50,9 @@ export default class EmailController {
     };
     smtpTransport.sendMail(mailOptions, (error, response) => {
       if (error) {
-        res.send(error);
+        res.status(201).send(error);
       } else {
-        res.send("Your message has been recieved!");
+        res.status(200).send("Your message has been recieved!");
       }
     });
 
