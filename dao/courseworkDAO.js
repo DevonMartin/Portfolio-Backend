@@ -3,7 +3,6 @@ import model from "../api/courseModel.js";
 
 export default class CourseworkDAO {
   static async refreshCoursework() {
-    console.log("refreshing");
     let cursor;
     try {
       // Get all data from db
@@ -15,7 +14,6 @@ export default class CourseworkDAO {
       );
       return { refresh_time: "error", courses: [] };
     }
-    console.log('Found Cursor');
     let result = await CourseworkDAO.getRefreshedCoursework(await cursor);
     return result;
   }
@@ -64,6 +62,7 @@ export default class CourseworkDAO {
     } catch (e) {
       console.error(`Unable to retrieve data for ${course}, ${e}`);
     }
+    console.log(course);
     let courseName = course.replaceAll("-", " ");
     // If there's a message, either the API call limit was reached, or the repository was not found.
     if (jsonResponse.message) {
