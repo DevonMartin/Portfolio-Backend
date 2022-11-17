@@ -87,7 +87,12 @@ export default class CourseworkDAO {
         allProjects.push(project);
       });
     });
-    return { name: course, projects: allProjects.sort(), status: status };
+    return {
+      link: `https://github.com/DevonMartin/${course}`,
+      name: course,
+      projects: allProjects.sort(),
+      status: status,
+    };
   }
 
   static async fetchCourseProjects(dirUrl) {
