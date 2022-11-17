@@ -62,8 +62,8 @@ export default class CourseworkDAO {
     } catch (e) {
       console.error(`Unable to retrieve data for ${course}, ${e}`);
     }
-    console.log(course);
-    let courseName = course.replaceAll("-", " ");
+    const toReplace = new RegExp('-', 'g');
+    let courseName = course.replace(toReplace, " ");
     // If there's a message, either the API call limit was reached, or the repository was not found.
     if (jsonResponse.message) {
       if (jsonResponse.message === "Not Found") {
