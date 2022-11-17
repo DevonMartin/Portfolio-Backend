@@ -1,8 +1,9 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 import model from "../api/courseModel.js";
 
 export default class CourseworkDAO {
   static async refreshCoursework() {
+    console.log("refreshing");
     let cursor;
     try {
       // Get all data from db
@@ -14,7 +15,8 @@ export default class CourseworkDAO {
       );
       return { refresh_time: "error", courses: [] };
     }
-    let result = await CourseworkDAO.getRefreshedCoursework(cursor);
+    console.log('Found Cursor');
+    let result = await CourseworkDAO.getRefreshedCoursework(await cursor);
     return result;
   }
 
@@ -38,7 +40,7 @@ export default class CourseworkDAO {
     }
     cursor.refresh_time = courseData.refresh_time;
     cursor.courses = courseData.courses;
-    await cursor.markModified(['refresh_time', 'courses']);
+    await cursor.markModified(["refresh_time", "courses"]);
     await cursor.save((err) => {
       if (err) console.log(err);
     });
