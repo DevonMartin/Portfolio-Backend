@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import model from "../api/courseModel.js";
+import model from "../models/courseModel.js";
 
 export default class CourseworkDAO {
   static async refreshCoursework() {

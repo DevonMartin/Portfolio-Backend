@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 
-import email from "./api/email.route.js";
-import courseRoutes from "./api/coursework.route.js";
+import email from "./routes/email.route.js";
+import courseRoutes from "./routes/coursework.route.js";
 
 const app = express();
 
