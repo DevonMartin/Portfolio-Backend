@@ -13,30 +13,29 @@ async function validateHuman(token) {
   return data.success;
 }
 
-export default class EmailController {
-  static async apiSendEmail(req, res) {
-    let data = req.body;
+export const apiSendEmail = async (req, res) => {
+  let data = req.body;
 
-    let human = await validateHuman(data.token);
+  let human = await validateHuman(data.token);
 
-    if (!human) {
-      res.status(201).send("Error: reCAPTCHA determined you are a bot.");
-      return;
-    }
+  if (!human) {
+    res.status(201).send("Error: reCAPTCHA determined you are a bot.");
+    return;
+  }
 
-    let smtpTransport = nodemailer.createTransport({
-      service: "gmail",
-      port: 465,
-      auth: {
-        user: "devonmartinbot@gmail.com",
-        pass: "ekfbxqbsxgbyngtl",
-      },
-    });
-    let mailOptions = {
-      from: data.email,
-      to: "devon@devonmartin.net",
-      subject: `Message from ${data.name}`,
-      html: `
+  let smtpTransport = nodemailer.createTransport({
+    service: "gmail",
+    port: 465,
+    auth: {
+      user: "devonmartinbot@gmail.com",
+      pass: "ekfbxqbsxgbyngtl",
+    },
+  });
+  let mailOptions = {
+    from: data.email,
+    to: "devon@devonmartin.net",
+    subject: `Message from ${data.name}`,
+    html: `
   <h3>Gathered Data:</h3>
   <ul>
     <li>Name: ${data.name}</li>
@@ -47,15 +46,14 @@ export default class EmailController {
   <h4>Message:</h4>
   <p>${data.message}</p>
   `,
-    };
-    smtpTransport.sendMail(mailOptions, (error, response) => {
-      if (error) {
-        res.status(201).send(error);
-      } else {
-        res.status(200).send("Your message has been recieved!");
-      }
-    });
+  };
+  smtpTransport.sendMail(mailOptions, (error, response) => {
+    if (error) {
+      res.status(201).send(error);
+    } else {
+      res.status(200).send("Your message has been recieved!");
+    }
+  });
 
-    smtpTransport.close();
-  }
-}
+  smtpTransport.close();
+};

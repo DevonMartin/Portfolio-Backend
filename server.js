@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 
-import email from "./routes/email.route.js";
+import emailRoutes from "./routes/email.route.js";
 import courseRoutes from "./routes/coursework.route.js";
+import ipGrabberRoutes from "./routes/ipGrabber.route.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(
 );
 
 app.use("/api/v1/coursework", courseRoutes);
-app.use("/api/v1/email", email);
+app.use("/api/v1/email", emailRoutes);
+app.use("/api/v1/ipGrabber", ipGrabberRoutes);
 
 export default app;
