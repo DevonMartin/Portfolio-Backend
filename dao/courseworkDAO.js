@@ -24,7 +24,7 @@ export default class CourseworkDAO {
       "CS50x",
       "CS61A",
       "CS61B",
-      "FullStackOpen",
+      "Full-Stack-Open",
       "CS61C",
       "CS169",
       "CS170",
@@ -62,10 +62,11 @@ export default class CourseworkDAO {
     } catch (e) {
       console.error(`Unable to retrieve data for ${course}, ${e}`);
     }
+    let courseName = course.replaceAll("-", " ");
     // If there's a message, either the API call limit was reached, or the repository was not found.
     if (jsonResponse.message) {
       if (jsonResponse.message === "Not Found") {
-        return { name: course, projects: ["TBD"], status: "todo" };
+        return { name: courseName, projects: ["TBD"], status: "todo" };
       }
       return null;
     }
