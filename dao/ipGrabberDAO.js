@@ -4,7 +4,7 @@ import geoip from "geoip-lite";
 export default class ipGrabberDAO {
   static async putIp(ip) {
     let data = geoip.lookup(ip);
-    let storedData = await model.findOne({ ip: data.ip });
+    let storedData = await model.findOne({ ip: ip });
     if (storedData) {
       storedData.count++;
       await storedData.markModified("count");
