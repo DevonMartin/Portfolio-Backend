@@ -4,7 +4,7 @@ const schema = mongoose.Schema({
     ip: String,
     city: String,
     region: String,
-    count: Number
+    visits: Number
 });
 
 let ipModel = mongoose.model("ip", schema);
