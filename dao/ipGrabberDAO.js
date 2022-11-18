@@ -1,28 +1,27 @@
 import model from "../models/ipModel.js";
+import geoip from "geoip-lite";
 
 export default class ipGrabberDAO {
-  static async putIp(data) {
-    if (data.ip) {
-      let storedData = await model.findOne({ ip: data.ip });
-      if (storedData) {
-        storedData.count++;
-        await storedData.markModified("count");
-        await storedData.save((err) => {
-          if (err) console.log(err);
-        });
-      } else {
-        let ip = data.ip;
-        let city = data.city || "Unknown";
-        let count = 1;
-        model.create({
-            ip: ip,
-            city: city,
-            count: count
-        });
-      }
-      return "Your IP address has been logged, for my tracking purposes.";
+  static async putIp(ip) {
+    let data = geoip.lookup(ip);
+    let storedData = await model.findOne({ ip: data.ip });
+    if (storedData) {
+      storedData.count++;
+      await storedData.markModified("count");
+      await storedData.save((err) => {
+        if (err) console.log(err);
+      });
+    } else {
+      let city = data.city || "Unknown";
+      let region = data.region || "Unknown";
+      let count = 1;
+      model.create({
+        ip: ip,
+        city: city,
+        region: region,
+        count: count,
+      });
     }
-    console.log('Error - No IP Address found.');
-    return null;
+    return "Thanks for checking out my website. :) I have grabbed your IP Address and some info about your location, just so I can see if my website is getting any traffic! If you're a hiring manager from NY.. Please? 🥺🙏🏼";
   }
 }
