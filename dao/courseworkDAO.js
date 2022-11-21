@@ -2,20 +2,19 @@ import fetch from "node-fetch";
 import model from "../models/courseModel.js";
 
 export default class CourseworkDAO {
-  cursor;
   static async refreshCoursework() {
-    if (!cursor) {
-      try {
-        // Get all data from db
-        cursor = await model.findOne();
-      } catch (e) {
-        console.error(
-          `Unable to find coursework data from db or convert results to an array, ${e}`
-        );
-        return { refresh_time: "error", courses: [] };
-      }
+    let cursor;
+    try {
+      // Get all data from db
+      cursor = await model.findOne();
+      // return cursor;
+    } catch (e) {
+      console.error(
+        `Unable to find coursework data from db or convert results to an array, ${e}`
+      );
+      return { refresh_time: "error", courses: [] };
     }
-    let result = await CourseworkDAO.getRefreshedCoursework(cursor);
+    let result = await CourseworkDAO.getRefreshedCoursework(await cursor);
     return result;
   }
 
@@ -63,7 +62,7 @@ export default class CourseworkDAO {
     } catch (e) {
       console.error(`Unable to retrieve data for ${course}, ${e}`);
     }
-    const toReplace = new RegExp("-", "g");
+    const toReplace = new RegExp('-', 'g');
     let courseName = course.replace(toReplace, " ");
     // If there's a message, either the API call limit was reached, or the repository was not found.
     if (jsonResponse.message) {
@@ -117,16 +116,15 @@ export default class CourseworkDAO {
   }
 
   static async getCoursework() {
-    if (!cursor) {
-      try {
-        // Get all data from db
-        cursor = await model.findOne();
-      } catch (e) {
-        console.error(
-          `Unable to find coursework data from db or convert results to an array, ${e}`
-        );
-        return { refresh_time: "error", courses: [] };
-      }
+    let cursor;
+    try {
+      // Get all data from db
+      cursor = await model.findOne();
+    } catch (e) {
+      console.error(
+        `Unable to find coursework data from db or convert results to an array, ${e}`
+      );
+      return { refresh_time: "error", courses: [] };
     }
     try {
       // Find time, refresh courses if 20+ minutes has passed since last refresh, and then return the refreshed courses.
